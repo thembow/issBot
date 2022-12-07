@@ -1,5 +1,7 @@
 # issBot
 *a discord bot that works with the International Space Station*
+![Natural Earth Data](https://www.naturalearthdata.com/wp-content/uploads/2009/08/NEV-Logo-color.png)
+![NASA](https://www.earthdata.nasa.gov/s3fs-public/earthdata-oaos-logo-hover.png)
 ## commands
 1. /iss - returns where the ISS is currently flying over and gets a satellite image
 2. /astronauts - returns a list with wikipedia links of all astronauts currently aboard the ISS
