@@ -1,9 +1,9 @@
-#issBot
+# issBot
 *a discord bot that works with the International Space Station*
-##commands
+## commands
 1. /iss - returns where the ISS is currently flying over and gets a satellite image
 2. /astronauts - returns a list with wikipedia links of all astronauts currently aboard the ISS
-##installation
+## installation
 1. download python 3.10 
 2. install required files by running "pip install -r requirements.txt"
 3. enter your discord bot token and email into the .env file
@@ -11,7 +11,7 @@
     https://www.naturalearthdata.com/downloads/10m-physical-vectors/10m-ocean/
 5. Enter in your email address and your discord bot token into the respective fields in the .env file
 6. run the bot.py file
-##resources used
+## resources used
 1. https://nominatim.org/release-docs/develop/ <- for reverse long/lat lookup
 2. http://open-notify.org/ <- for long/lat of ISS and astronauts
 3. https://www.mediawiki.org/wiki/API:Main_page <- wikipedia api 
