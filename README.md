@@ -11,3 +11,9 @@
     https://www.naturalearthdata.com/downloads/10m-physical-vectors/10m-ocean/
 5. Enter in your email address and your discord bot token into the respective fields in the .env file
 6. run the bot.py file
+##resources used
+1. https://nominatim.org/release-docs/develop/ <- for reverse long/lat lookup
+2. http://open-notify.org/ <- for long/lat of ISS and astronauts
+3. https://www.mediawiki.org/wiki/API:Main_page <- wikipedia api 
+4. https://www.naturalearthdata.com/about/terms-of-use/ <- ocean shape data
+5. https://nasa-gibs.github.io/gibs-api-docs/ <- NASA GIBS api
