@@ -10,7 +10,7 @@
 2. install required files by running "pip install -r requirements.txt"
 3. enter your discord bot token and email into the .env file
 4. Download ocean from this link and place into this folder
-    https://www.naturalearthdata.com/downloads/10m-physical-vectors/10m-ocean/
+    https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_geography_marine_polys.zip
 5. Enter in your email address and your discord bot token into the respective fields in the .env file
 6. run the bot.py file
 ## resources used
