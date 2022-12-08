@@ -8,6 +8,7 @@
 ## installation
 1. download python 3.10 
 2. install required files by running "pip install -r requirements.txt"
+    *if you get an issue with py-cord download it directly by running 'pip install git+https://github.com/Pycord-Development/pycord'*
 3. enter your discord bot token and email into the .env file
 4. Download ocean from this link and place into this folder
     https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_geography_marine_polys.zip
