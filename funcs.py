@@ -15,7 +15,7 @@ if not email:
 if (os.path.exists("ne_10m_geography_marine_polys.zip")):
     print("Ocean shapefile succesfully found!")
 else:
-    print("Error! Ocean shapefile not found! Please download ocean from here and place into folder! https://www.naturalearthdata.com/downloads/10m-physical-vectors/10m-ocean/")
+    print("Error! Ocean shapefile not found! Please download ocean from here and place into folder! https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_geography_marine_polys.zip")
     sys.exit(-1)
 
 def astroLookup():
