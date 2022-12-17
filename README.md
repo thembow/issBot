@@ -9,10 +9,10 @@
 ## installation
 1. download python 3.10 
 2. install required files by running "pip install -r requirements.txt"
-   -if you get an issue with py-cord download it directly by running 'pip install git+https://github.com/Pycord-Development/pycord'
+   - if you get an issue with py-cord download it directly by running 'pip install git+https://github.com/Pycord-Development/pycord'
 3. enter your discord bot token and email into the .env file
 4. download ocean from this link and place into this folder
-   -https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_geography_marine_polys.zip
+   - https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_geography_marine_polys.zip
 5. run the bot.py file
 ## resources used
 1. https://nominatim.org/release-docs/develop/ <- for reverse long/lat lookup
