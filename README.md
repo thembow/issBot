@@ -1,5 +1,5 @@
 # issBot
-*a discord bot that works with the International Space Station, art by ig@tomnooker*
+*a discord bot that works with the International Space Station, art by ig@tomnooker, MIT license*
 ![cover art](https://i.imgur.com/gthGBwB.jpg)
 ![Natural Earth Data](https://www.naturalearthdata.com/wp-content/uploads/2009/08/NEV-Logo-color.png)
 ![NASA](https://www.earthdata.nasa.gov/s3fs-public/earthdata-oaos-logo-hover.png)
