@@ -80,7 +80,14 @@ def astroLookup():
         astrolinks.append(f"[{title}]({link})")
         #creates links
     return astrolinks
-"""astroLookup queries the ISS for the astronauts currently onboard, and then returns their wikipedia links"""
+    """
+    Queries ISS for astronauts currently onboard, returns list of names hyperlinked with their wikipedia
+
+    :return: hyperlinked list of astronauts on iss
+    :rtype: list
+    :raises HTTPError if request fails
+    :raises Error if request fails
+    """
 
 def oceanLookup(la, lo): 
     try:
@@ -101,7 +108,14 @@ def oceanLookup(la, lo):
             print(f"Coordinates found in {cShape[14]}!")
             return cShape[14]
     return "null"
-"""oceanLookup checks coordinates using ocean data to determine which ocean a set of coords is in"""
+    """
+    Checks coordinates using ocean data to determine which ocean a set of coords is in
+
+    :param str la: latitude
+    :param str lo: longitude
+    :return: name of ocean where found OR null
+    :raises Error: if shapefile cannot be found
+    """
 
 def issLookup():
     try:
@@ -138,8 +152,14 @@ def issLookup():
         return (lat, long, "the "+ ocean)
     else:
         return (lat, long, nomJson["display_name"])
-"""issLookup gets the coords of the ISS and tries to reverse lookup. if it fails, it uses oceanLookup"""
+    """
 
+    issLookup gets the coords of the ISS and tries to reverse lookup. if it fails, it uses oceanLookup
+    :return: latitude, longitude, and possible location
+    :rtype: tuple 
+    :raises HTTPError: if request fails
+    :raises Error: if request fails
+    """
 def coordImg(lat, lon, level):
     lat = float(lat)
     lon = float(lon)
@@ -148,5 +168,12 @@ def coordImg(lat, lon, level):
     #thank u @lucianpls https://github.com/nasa-gibs/onearth/issues/53#issuecomment-299738858
     #this math gets us an approximate satellite image of the coordinates. its slightly off so if you want to try and fix go ahead
     return "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/2012-07-09/250m/"+str(level)+"/"+str(int(row))+"/"+str(int(col))+".jpg"
-"""uses NASA GIBS to get a satellite image of where the coordinates are"""
+    """
+    uses NASA GIBS to get a satellite image of where the coordinates are
+    :param str lat: latitude
+    :param str lon: longitude
+    :param int level: level of zoom
+    :return: link to satellite image
+    :rtype: string
+    """
 
