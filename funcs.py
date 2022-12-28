@@ -160,20 +160,59 @@ def issLookup():
     :raises HTTPError: if request fails
     :raises Error: if request fails
     """
-def coordImg(lat, lon, level):
+
+from datetime import datetime
+
+def parse_date(date_string):
+    try:
+        #parses date data from string in year-month-day format
+        date = datetime.strptime(date_string, "%Y-%m-%d")
+    except ValueError:
+        # If the date string is invalid, return None
+        return None
+
+    # If the date string is valid, return the datetime object
+    return (str('%02d' % date.year), str('%02d' % date.month), str('%02d' % date.day))
+    #tuple to unpack, we have to do string formatting to get it to work with the url, 2012-7-9 doesnt work but 2012-07-09 does
+    """
+
+    parse_date takes string input and returns datetime object. if it fails, returns None.
+    :return: tuple with year, month, day
+    :rtype: tuple
+    :param string date_string: string with date info
+    :raises ValueError: if date string is invalid 
+    """
+def coordImg(lat, lon, level, date="2012-07-09"):
+    date_valid = True
     lat = float(lat)
     lon = float(lon)
-    row = ((90 - lat) * (2 ** level)) // 288
-    col = ((180 + lon) * (2 ** level)) // 288
+    row = str(int(((90 - lat) * (2 ** level)) // 288))
+    col = str(int(((180 + lon) * (2 ** level)) // 288))
     #thank u @lucianpls https://github.com/nasa-gibs/onearth/issues/53#issuecomment-299738858
-    #this math gets us an approximate satellite image of the coordinates. its slightly off so if you want to try and fix go ahead
-    return "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/2012-07-09/250m/"+str(level)+"/"+str(int(row))+"/"+str(int(col))+".jpg"
+    #this math gets us an approximate satellite image of the coordinates. its slightly off, fix if u can
+    #converts back to int->string for url purposes, same with level below
+    level = str(level)
+    date_stripped = parse_date(date)
+    #strip date information
+    if date_stripped is None:
+        #to handle errors
+        year = "2012"
+        month = "07"
+        day = "09"
+        date_valid = False
+    else:
+        year, month, day = date_stripped
+        #tuple unpacking
+    url = "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/"+year+"-"+month+"-"+day+"/250m/"+level+"/"+row+"/"+col+".jpg"
+    #doesnt work as an f string for some reason so we using +var+
+    return (url, date_valid)
     """
     uses NASA GIBS to get a satellite image of where the coordinates are
     :param str lat: latitude
     :param str lon: longitude
     :param int level: level of zoom
-    :return: link to satellite image
-    :rtype: string
+    :param string date: date of when image should be taken
+    :return: tuple with url, and if date was valid
+    :rtype: tuple
     """
 

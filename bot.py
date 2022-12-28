@@ -29,7 +29,12 @@ async def iss(ctx, zoom:int):
         cI = coordImg(iss[0], iss[1], zoom)
         time.sleep(1)
         #limit speed so we dont send too many requests at once
-        await ctx.respond(f"The International Space Station is currently flying over [{iss[2]}]({cI})")
+        if cI[1]:
+            #if date_time was valid
+            await ctx.respond(f"The International Space Station is currently flying over [{iss[2]}]({cI})")
+        else:
+            await ctx.respond(f"The International Space Station is currently flying over [{iss[2]}]({cI})\nError: Entered date-time was invalid, defaulting to 2012-07-09")
+            #respond with error message
 @bot.slash_command(name = "astronauts", description = "List with links of all astronauts aboard the ISS")
 async def astro(ctx):
     links = astroLookup()
