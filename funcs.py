@@ -5,6 +5,7 @@ from shapely.geometry import shape, Point
 from dotenv import load_dotenv
 import os
 import sys
+from exceptions import *
 
 load_dotenv()
 email = os.getenv('EMAIL')
@@ -19,6 +20,13 @@ else:
     sys.exit(-1)
 
 def astroLookup():
+    """
+    Queries ISS for astronauts currently onboard, returns list of names hyperlinked with their wikipedia
+    :return: hyperlinked list of astronauts on iss
+    :rtype: list
+    :raises HTTPError if request fails
+    :raises Error if request fails
+    """
     astronauts = []
     try:
         notifyAstroResponse = requests.get('http://api.open-notify.org/astros.json')
@@ -80,16 +88,15 @@ def astroLookup():
         astrolinks.append(f"[{title}]({link})")
         #creates links
     return astrolinks
-    """
-    Queries ISS for astronauts currently onboard, returns list of names hyperlinked with their wikipedia
 
-    :return: hyperlinked list of astronauts on iss
-    :rtype: list
-    :raises HTTPError if request fails
-    :raises Error if request fails
+def oceanLookup(la, lo):
     """
-
-def oceanLookup(la, lo): 
+    Checks coordinates using ocean data to determine which ocean a set of coords is in
+    :param str la: latitude
+    :param str lo: longitude
+    :return: name of ocean where found OR null
+    :raises Error: if shapefile cannot be found
+    """ 
     try:
         sf = shapefile.Reader("ne_10m_geography_marine_polys.zip")
     except:
@@ -108,16 +115,15 @@ def oceanLookup(la, lo):
             print(f"Coordinates found in {cShape[14]}!")
             return cShape[14]
     return "null"
-    """
-    Checks coordinates using ocean data to determine which ocean a set of coords is in
-
-    :param str la: latitude
-    :param str lo: longitude
-    :return: name of ocean where found OR null
-    :raises Error: if shapefile cannot be found
-    """
 
 def issLookup():
+    """
+    issLookup gets the coords of the ISS and tries to reverse lookup. if it fails, it uses oceanLookup
+    :return: latitude, longitude, and possible location
+    :rtype: tuple 
+    :raises HTTPError: if request fails
+    :raises Error: if request fails
+    """
     try:
         notifyISS = requests.get("http://api.open-notify.org/iss-now.json")
         notifyISS.raise_for_status()
@@ -129,7 +135,6 @@ def issLookup():
     long = notifyISSJson['iss_position']['longitude']
     lat = notifyISSJson['iss_position']['latitude']
     #set up long and lat
-    print(f"lat: {lat}, long: {long}")
     nomLink = "https://nominatim.openstreetmap.org/reverse?format=json&lat="+lat+"&lon="+long+"&zoom=10&accept-language=en&email="+email
     headers = {
         'User-Agent': 'issBot',
@@ -152,42 +157,47 @@ def issLookup():
         return (lat, long, "the "+ ocean)
     else:
         return (lat, long, nomJson["display_name"])
-    """
-
-    issLookup gets the coords of the ISS and tries to reverse lookup. if it fails, it uses oceanLookup
-    :return: latitude, longitude, and possible location
-    :rtype: tuple 
-    :raises HTTPError: if request fails
-    :raises Error: if request fails
-    """
+    
 
 from datetime import datetime
 
 def parse_date(date_string):
+    """
+    parse_date takes string input and returns datetime object. if it fails, returns None.
+    :return: date-time
+    :rtype: date-time object
+    :param string date_string: string with date info
+    :raises ValueError: if date string is invalid 
+    """
     try:
         #parses date data from string in year-month-day format
         date = datetime.strptime(date_string, "%Y-%m-%d")
     except ValueError:
         # If the date string is invalid, return None
         return None
-
+    
     # If the date string is valid, return the datetime object
-    return (str('%02d' % date.year), str('%02d' % date.month), str('%02d' % date.day))
-    #tuple to unpack, we have to do string formatting to get it to work with the url, 2012-7-9 doesnt work but 2012-07-09 does
-    """
+    return date
 
-    parse_date takes string input and returns datetime object. if it fails, returns None.
-    :return: tuple with year, month, day
-    :rtype: tuple
-    :param string date_string: string with date info
-    :raises ValueError: if date string is invalid 
+def coordImg(lat, lon, date="2012-07-09", level=5):
+    """gets url from GIBS api of satellite image
+
+    Args:
+        lat (str): latitude
+        lon (str): longitude
+        level (str): level of zoom
+        date (str, optional): when image should be taken, YEAR-MONTH-DAY format. Defaults to "2012-07-09".
+
+    Returns:
+        tuple: url
     """
-def coordImg(lat, lon, level, date="2012-07-09"):
-    date_valid = True
     lat = float(lat)
     lon = float(lon)
-    row = str(int(((90 - lat) * (2 ** level)) // 288))
-    col = str(int(((180 + lon) * (2 ** level)) // 288))
+    level = int(level)
+    row = ((90 - lat) * (2 ** level)) // 288
+    row = str(int(row))
+    col = ((180 + lon) * (2 ** level)) // 288
+    col = str(int(col))
     #thank u @lucianpls https://github.com/nasa-gibs/onearth/issues/53#issuecomment-299738858
     #this math gets us an approximate satellite image of the coordinates. its slightly off, fix if u can
     #converts back to int->string for url purposes, same with level below
@@ -199,20 +209,12 @@ def coordImg(lat, lon, level, date="2012-07-09"):
         year = "2012"
         month = "07"
         day = "09"
-        date_valid = False
+        raise InvalidDateException
     else:
-        year, month, day = date_stripped
-        #tuple unpacking
-    url = "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/"+year+"-"+month+"-"+day+"/250m/"+level+"/"+row+"/"+col+".jpg"
+        year = str('%02d' % date_stripped.year) 
+        month = str('%02d' % date_stripped.month)
+        day = str('%02d' % date_stripped.day)
+        #we have to do string formatting or else the link doesnt work. appends a 0 to day/month for 01-09
+    return "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/"+year+"-"+month+"-"+day+"/250m/"+level+"/"+row+"/"+col+".jpg"
     #doesnt work as an f string for some reason so we using +var+
-    return (url, date_valid)
-    """
-    uses NASA GIBS to get a satellite image of where the coordinates are
-    :param str lat: latitude
-    :param str lon: longitude
-    :param int level: level of zoom
-    :param string date: date of when image should be taken
-    :return: tuple with url, and if date was valid
-    :rtype: tuple
-    """
 
