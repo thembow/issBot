@@ -101,7 +101,7 @@ def oceanLookup(la, lo):
         sf = shapefile.Reader("ne_10m_geography_marine_polys.zip")
     except:
         print("Error! Cannot find ocean shapefile!")
-        return "null"
+        return None
     #file contains data we need to determine coordinate location
     shapes = sf.shapes()
     for x in range(len(shapes)):
@@ -152,8 +152,8 @@ def issLookup():
     if (nomJson.get("error") == "Unable to geocode"):
         print("Unable to geocode, attempting oceanLookup")
         ocean = oceanLookup(lat, long)
-        if (ocean == "null"):
-            return (lat, long, "null")
+        if ocean is None:
+            return None
         return (lat, long, "the "+ ocean)
     else:
         return (lat, long, nomJson["display_name"])
@@ -189,7 +189,7 @@ def coordImg(lat, lon, date="2012-07-09", level=5):
         date (str, optional): when image should be taken, YEAR-MONTH-DAY format. Defaults to "2012-07-09".
 
     Returns:
-        tuple: url
+        str: url
     """
     lat = float(lat)
     lon = float(lon)

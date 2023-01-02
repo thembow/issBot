@@ -12,7 +12,7 @@ def is_image_mostly_black(image_path, threshold=0.5):
         threshold (float, optional): What percentage black to fail. Defaults to 0.5.
 
     Returns:
-        _type_: _description_
+        boolean: True if mostly black, False if not mostly black
     """
     # Open the image file using the Image module from the Python Imaging Library (PIL)
     image = Image.open(image_path)
@@ -130,9 +130,12 @@ def delete_file(file_name):
         print(f"File: {file_name} deleted!")
     else:
         print(f"Error! File: {file_name} not found")
-
+"""
 iss = issLookup()
+date_input = input("Please enter a date to retrieve ISS position data from (YEAR-MONTH-DAY):\t")
 try:    
-    time_travel(iss[0], iss[1], "777")
+    tt_link = time_travel(iss[0], iss[1], date_input)
+    print(f"link: {tt_link}")
 except InvalidDateException:
-    print("DATE WAS INVALID!!")
+    print("DATE WAS INVALID!")
+"""
